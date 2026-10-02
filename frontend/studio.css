@@ -494,19 +494,16 @@ body.studio-on::after { display: none; }
   position: relative;
   cursor: pointer;
   color: inherit;
-  overflow: visible;
-  perspective: 900px;
+  overflow: hidden;
 }
-.stack {
-  height: 100%;
-  transform-style: preserve-3d;
-  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
-}
+.case.out { overflow: visible; }
+.stack { height: 100%; }
 .case .lip {
   position: absolute;
   left: 18px;
   right: 18px;
   bottom: 16px;
+  z-index: 2;
   background: #f4efe6;
   color: #111;
   font-size: 10px;
@@ -518,17 +515,25 @@ body.studio-on::after { display: none; }
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  gap: 8px;
+  gap: 4px;
   height: 100%;
-  padding: 0 16px 36px;
+  padding: 14px 12px 38px;
 }
+.case .floppy {
+  flex: 1 1 0;
+  width: auto;
+  min-width: 0;
+  height: 58px;
+}
+.case.out .floppy { z-index: 3; }
 .floppy {
   width: 52px;
   height: 56px;
   border-radius: 4px;
   position: relative;
   flex: none;
-  transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), opacity 180ms ease;
+  overflow: hidden;
+  transition: transform 460ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 .floppy b {
   position: absolute;
@@ -542,10 +547,9 @@ body.studio-on::after { display: none; }
   background: rgba(255,255,255,0.82);
   font-weight: 700;
   padding: 1px 2px;
-}
-.case.pop .floppy {
-  opacity: 0;
-  transition-duration: 380ms;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .project { animation: row-in 420ms cubic-bezier(0.22, 1, 0.36, 1) both; }
 @keyframes row-in {
@@ -798,7 +802,7 @@ body.studio-on::after { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tile, .switch i, .scroll-cue svg, .crt, .crt .peek, .crt .preview,
+  .tile, .floppy, .switch i, .scroll-cue svg, .crt, .crt .peek, .crt .preview,
   .btn, .btn svg, .pill, .pill svg { transition: none !important; animation: none !important; }
   .crt .preview { opacity: 1; }
 }

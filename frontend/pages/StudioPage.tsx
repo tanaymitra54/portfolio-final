@@ -830,34 +830,17 @@ function Shelf({
   disks: Disk[];
   onToggle: () => void;
 }) {
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [hot, setHot] = useState<number | null>(null);
-  const [pop, setPop] = useState(false);
-
-  function track(e: React.PointerEvent<HTMLButtonElement>) {
-    if (open || pop) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const px = (e.clientX - rect.left) / rect.width;
-    const py = (e.clientY - rect.top) / rect.height;
-    setTilt({ x: (py - 0.5) * -12, y: (px - 0.5) * 16 });
-    setHot(Math.min(disks.length - 1, Math.max(0, Math.floor(px * disks.length))));
-  }
-
-  function release() {
-    setTilt({ x: 0, y: 0 });
-    setHot(null);
-  }
+  const [out, setOut] = useState(open);
+  const busy = useRef(false);
 
   function click() {
-    if (!open) {
-      setPop(true);
-      window.setTimeout(() => {
-        setPop(false);
-        onToggle();
-      }, 380);
-      return;
-    }
-    onToggle();
+    if (busy.current) return;
+    busy.current = true;
+    setOut(!open);
+    window.setTimeout(() => {
+      busy.current = false;
+      onToggle();
+    }, 460);
   }
 
   return (
@@ -865,48 +848,33 @@ function Shelf({
       <h3>{title}</h3>
       <p className="meta">{meta}</p>
       <button
-        className={pop ? "case pop" : "case"}
+        className={out ? "case out" : "case"}
         type="button"
         onClick={click}
-        onPointerMove={track}
-        onPointerLeave={release}
         aria-expanded={open}
       >
-        {(!open || pop) && (
-          <div className="stack" style={{ transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)` }}>
-            <div className="disks-in">
-              {disks.map((d, i) => {
-                const lift = pop ? -78 : hot === i ? -28 : hot !== null && Math.abs(hot - i) === 1 ? -12 : 0;
-                const slide = pop ? (i - (disks.length - 1) / 2) * 10 : hot === i ? (pxShift(i, hot)) : 0;
-                return (
-                  <span
-                    key={d.id}
-                    className="floppy"
-                    style={{
-                      background: d.color,
-                      transform: `translate(${slide}px, ${lift}px)`,
-                      zIndex: hot === i ? 4 : 1,
-                      transitionDelay: pop ? `${i * 28}ms` : "0ms",
-                    }}
-                  >
-                    <b>{d.title.split(" ")[0]}</b>
-                  </span>
-                );
-              })}
-            </div>
+        <div className="stack">
+          <div className="disks-in">
+            {disks.map((d) => (
+              <span
+                key={d.id}
+                className="floppy"
+                style={{
+                  background: d.color,
+                  transform: out ? "translateY(-86px)" : "translateY(0)",
+                }}
+              >
+                <b>{d.title.split(" ")[0]}</b>
+              </span>
+            ))}
           </div>
-        )}
+        </div>
         <span className="lip">{title} · {String(disks.length).padStart(2, "0")}</span>
       </button>
       <p className="names">{disks.map((d) => d.title).join(" · ")}</p>
       <p className="hint">{open ? "Click the box to put them back." : "Click the box to take them out."}</p>
     </div>
   );
-}
-
-function pxShift(index: number, hot: number | null) {
-  if (hot === null || index !== hot) return 0;
-  return index < 3 ? -6 : 6;
 }
 
 function DiskList({
