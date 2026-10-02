@@ -1,4 +1,8 @@
 [build]
+  # Force the build to run from the repository root. Setting this here
+  # overrides any Base directory configured in the Netlify UI, which was
+  # resolving publish/functions paths under frontend/ (e.g. frontend/frontend/dist).
+  base = "."
   command = "npm run build"
   publish = "frontend/dist"
   functions = "netlify/functions"
