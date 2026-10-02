@@ -14,8 +14,4 @@ export default defineConfig({
     tailwindcss(),
     react(),
   ],
-  mode: "development",
-  build: {
-    minify: false,
-  }
 })
