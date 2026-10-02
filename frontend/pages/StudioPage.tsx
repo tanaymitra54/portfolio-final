@@ -13,6 +13,7 @@ import {
   LayoutGrid,
 } from "lucide-react";
 import "../studio.css";
+import { StackLine } from "../stackMarks";
 
 type Disk = {
   id: string;
@@ -288,17 +289,20 @@ export function StudioPage() {
       clearTiles(layer);
       return;
     }
+    let edge = 1;
     if (layer.classList.contains("hero-tiles")) {
       const nx = (clientX - rect.left) / rect.width;
       const ny = (clientY - rect.top) / rect.height;
       const dx = (nx - 0.5) / 0.16;
       const dy = (ny - 0.76) / 0.22;
-      if (dx * dx + dy * dy < 1) {
+      const d = Math.hypot(dx, dy);
+      edge = Math.min(1, Math.max(0, (d - 0.85) / 0.45));
+      if (edge <= 0) {
         clearTiles(layer);
         return;
       }
     }
-    const cell = layer.classList.contains("hero-tiles") ? 64 : 52;
+    const cell = 64;
     const col = Math.floor((clientX - rect.left) / cell);
     const row = Math.floor((clientY - rect.top) / cell);
     const key = `${layer.className}:${col},${row}`;
@@ -308,17 +312,17 @@ export function StudioPage() {
     }
     clearTiles(layer);
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    for (let r = row - 2; r <= row + 2; r++) {
-      for (let c = col - 2; c <= col + 2; c++) {
+    for (let r = row - 3; r <= row + 3; r++) {
+      for (let c = col - 3; c <= col + 3; c++) {
         const el = layer.querySelector<HTMLElement>(`[data-cell="${c},${r}"]`);
         if (!el) continue;
         const dist = Math.hypot(c - col, r - row);
-        const lift = Math.max(0, 1 - dist / 2.6);
+        const lift = Math.max(0, 1 - dist / 3.4) * edge;
         if (lift <= 0.05) continue;
         el.dataset.hot = "1";
-        const red = Math.round(227 + (252 - 227) * lift);
-        const green = Math.round(73 + (176 - 73) * lift);
-        const blue = Math.round(68 + (166 - 68) * lift);
+        const red = Math.round(205 + (255 - 205) * lift);
+        const green = Math.round(76 + (236 - 76) * lift);
+        const blue = Math.round(67 + (214 - 67) * lift);
         el.style.background = `rgb(${red}, ${green}, ${blue})`;
         if (!reduce) el.style.transform = `translateY(${(-8 * lift).toFixed(1)}px)`;
         el.style.boxShadow = `inset 0 1px 0 rgba(255,255,255,${(0.5 * lift).toFixed(2)}), 0 ${(5 * lift).toFixed(1)}px 0 rgba(140,28,36,${(0.4 * lift).toFixed(2)})`;
@@ -349,7 +353,7 @@ export function StudioPage() {
     }
     const build = () => {
       fill(tiles.current, 64);
-      fill(contactTiles.current, 52);
+      fill(contactTiles.current, 64);
     };
     build();
     const hero = document.querySelector(".hero");
@@ -422,7 +426,7 @@ export function StudioPage() {
       >
         <div className="hero-grid" />
         <div className="hero-tiles" ref={tiles} />
-        <img className="diorama" src="/hero-diorama.jpg" alt="" />
+        <img className="diorama" src="/hero-diorama.png" alt="" />
         <div className="hero-copy">
           <p className="kicker">I'M TANAY</p>
           <h1 className="display">MAKING THINGS<br />FEEL RIGHT</h1>
@@ -564,11 +568,40 @@ export function StudioPage() {
           <h3 className="eyebrow" style={{ marginBottom: 12 }}>TOOLKIT</h3>
           <table className="kit">
             <tbody>
-              <tr><th>Languages</th><td>Python, TypeScript, JavaScript, Java, C, C++</td></tr>
-              <tr><th>Frontend</th><td>React, Next.js, Tailwind CSS, HTML, CSS</td></tr>
-              <tr><th>Backend</th><td>Node.js, Express, Flask, FastAPI</td></tr>
-              <tr><th>AI</th><td>scikit-learn, TensorFlow, LangChain, NLP</td></tr>
-              <tr><th>Data</th><td>Postgres, Firebase, Supabase, MongoDB, MySQL</td></tr>
+              <tr><th>Languages</th><td><StackLine items={[
+                { name: "Python", icon: "python" },
+                { name: "TypeScript", icon: "typescript" },
+                { name: "JavaScript", icon: "javascript" },
+                { name: "Java", icon: "java" },
+                { name: "C", icon: "c" },
+                { name: "C++", icon: "cplusplus" },
+              ]} /></td></tr>
+              <tr><th>Frontend</th><td><StackLine items={[
+                { name: "React", icon: "react" },
+                { name: "Next.js", icon: "next" },
+                { name: "Tailwind CSS", icon: "tailwind" },
+                { name: "HTML", icon: "html" },
+                { name: "CSS", icon: "css" },
+              ]} /></td></tr>
+              <tr><th>Backend</th><td><StackLine items={[
+                { name: "Node.js", icon: "node" },
+                { name: "Express", icon: "express" },
+                { name: "Flask", icon: "flask" },
+                { name: "FastAPI", icon: "fastapi" },
+              ]} /></td></tr>
+              <tr><th>AI</th><td><StackLine items={[
+                { name: "scikit-learn", icon: "sklearn" },
+                { name: "TensorFlow", icon: "tensorflow" },
+                { name: "LangChain", icon: "langchain" },
+                { name: "NLP", icon: "nlp" },
+              ]} /></td></tr>
+              <tr><th>Data</th><td><StackLine items={[
+                { name: "Postgres", icon: "postgres" },
+                { name: "Firebase", icon: "firebase" },
+                { name: "Supabase", icon: "supabase" },
+                { name: "MongoDB", icon: "mongodb" },
+                { name: "MySQL", icon: "mysql" },
+              ]} /></td></tr>
             </tbody>
           </table>
         </div>

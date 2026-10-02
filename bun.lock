@@ -1,5 +1,6 @@
 {
   "lockfileVersion": 1,
+  "configVersion": 0,
   "workspaces": {
     "": {
       "name": "leap-app",
@@ -15,7 +16,7 @@
       "name": "backend",
       "version": "1.0.0",
       "dependencies": {
-        "encore.dev": "^1.49.3",
+        "encore.dev": "^1.58.6",
       },
       "devDependencies": {
         "typescript": "^5.8.3",
@@ -363,7 +364,7 @@
 
     "electron-to-chromium": ["electron-to-chromium@1.5.199", "", {}, "sha512-3gl0S7zQd88kCAZRO/DnxtBKuhMO4h0EaQIN3YgZfV6+pW+5+bf2AdQeHNESCoaQqo/gjGVYEf2YM4O5HJQqpQ=="],
 
-    "encore.dev": ["encore.dev@1.49.3", "", {}, "sha512-7014blH0NESWGBQ0iSEjK1uDb3Yd3fT1XA/miFkPWTBGTmj26MI78f6NUEw/HfGcU5LtoA6MhwCl0icCrLB62A=="],
+    "encore.dev": ["encore.dev@1.58.6", "", {}, "sha512-KUf9ot7peFuNWJYt/GcvRAns2zThCQ4qx33snDHwO4BODkCq7hOSlHY2LbmJ+z/tvq/j7+z2yTlO4i/LEij6/Q=="],
 
     "enhanced-resolve": ["enhanced-resolve@5.18.3", "", { "dependencies": { "graceful-fs": "^4.2.4", "tapable": "^2.2.0" } }, "sha512-d4lC8xfavMeBjzGr2vECC3fsGXziXZQyJxD868h2M/mBI3PwAuODxAkLkq5HYuvrPYcUtiLzsTo8U3PgX3Ocww=="],
 
