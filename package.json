@@ -8,7 +8,7 @@
     "frontend"
   ],
   "scripts": {
-    "build": "cd frontend && npm ci || npm install && npm run build"
+    "build": "npm install --include=dev && cd frontend && npm run build"
   },
   "dependencies": {
     "pg": "^8.11.5",

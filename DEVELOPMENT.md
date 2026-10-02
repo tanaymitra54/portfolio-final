@@ -127,5 +127,25 @@ git push origin main
 - [GitHub Integration](https://encore.dev/docs/platform/integrations/github)
 - [Encore Cloud Dashboard](https://app.encore.dev)
 
+## Deploying to Netlify
+
+The repository is preconfigured for Netlify via `netlify.toml`:
+
+- **Build command:** `npm run build` (installs frontend deps and outputs `frontend/dist`)
+- **Publish directory:** `frontend/dist`
+- **Functions directory:** `netlify/functions`
+- **Node version:** 22 (pinned with `NODE_VERSION`)
+
+### Required environment variables
+
+Set these in **Netlify → Site configuration → Environment variables**:
+
+| Variable | Purpose |
+| --- | --- |
+| `DATABASE_URL` | Postgres connection string used by the serverless functions |
+| `ADMIN_PASSWORD` | Password for the admin area / API authentication |
+
+Without `DATABASE_URL` the API functions return errors, and without `ADMIN_PASSWORD` admin login and write endpoints will reject requests.
+
 
 
